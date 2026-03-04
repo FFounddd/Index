@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ORI ARCHIVE // WORLD INDEX</title>
+
+<style>
+
+/* ---------- GLOBAL ---------- */
+
+body{
+    margin:0;
+    background:#05070b;
+    font-family: "Consolas", monospace;
+    color:#d8e1ff;
+}
+
+h1,h2,h3{
+    font-weight:normal;
+}
+
+/* ---------- ORI FRAME ---------- */
+
+#frame{
+    width:95%;
+    height:92vh;
+    margin:auto;
+    margin-top:2vh;
+    border:1px solid #3a4d7a;
+    box-shadow:0 0 15px #15234a;
+    display:grid;
+    grid-template-columns:250px 1fr;
+    grid-template-rows:60px 1fr;
+}
+
+/* ---------- HEADER ---------- */
+
+#header{
+    grid-column:1/3;
+    background:#0c1325;
+    border-bottom:1px solid #3a4d7a;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 20px;
+}
+
+#title{
+    font-size:18px;
+    letter-spacing:2px;
+    color:#8bb0ff;
+}
+
+#title span{
+    color:#ff5fa2;
+}
+
+/* ---------- SIDEBAR ---------- */
+
+#sidebar{
+    background:#0a0f1d;
+    border-right:1px solid #3a4d7a;
+    overflow-y:auto;
+}
+
+.section{
+    padding:12px;
+    border-bottom:1px solid #19274a;
+    cursor:pointer;
+}
+
+.section:hover{
+    background:#101a34;
+}
+
+/* ---------- CONTENT ---------- */
+
+#content{
+    padding:20px;
+    overflow-y:auto;
+}
+
+.entry{
+    border:1px solid #223566;
+    margin-bottom:15px;
+    padding:15px;
+    background:#0a1020;
+}
+
+.entry h3{
+    color:#7aa2ff;
+}
+
+.entry p{
+    color:#cfd6ff;
+    line-height:1.5;
+}
+
+/* ---------- SEARCH ---------- */
+
+#search{
+    width:200px;
+    background:#111c3a;
+    border:none;
+    color:white;
+    padding:6px;
+}
+
+/* ---------- ISM GLITCH ---------- */
+
+.glitch{
+    animation:glitch 0.2s infinite;
+}
+
+@keyframes glitch{
+
+    0%{text-shadow:1px 0 red}
+    25%{text-shadow:-1px 0 cyan}
+    50%{text-shadow:1px 0 purple}
+    75%{text-shadow:-1px 0 white}
+    100%{text-shadow:0 0 transparent}
+
+}
+
+/* ---------- SCROLLBAR ---------- */
+
+::-webkit-scrollbar{
+    width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#4a6ed6;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="frame">
+
+<div id="header">
+<div id="title">ORI ARCHIVE :: <span>WORLD INDEX</span></div>
+<input id="search" placeholder="search archive...">
+</div>
+
+<div id="sidebar">
+
+<div class="section" onclick="loadSection('characters')">
+CHARACTERS
+</div>
+
+<div class="section" onclick="loadSection('locations')">
+LOCATIONS
+</div>
+
+<div class="section" onclick="loadSection('factions')">
+FACTIONS
+</div>
+
+<div class="section" onclick="loadSection('events')">
+HISTORICAL EVENTS
+</div>
+
+<div class="section" onclick="loadSection('logs')">
+ARCHIVED LOGS
+</div>
+
+</div>
+
+<div id="content">
+
+<h2>ORI SYSTEM ONLINE</h2>
+<p>
+Welcome to the world index.  
+All known data fragments and historical archives are stored here.
+</p>
+
+<p class="glitch">
+ISM NOTE: do not trust archives older than the Mournland event :)
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+/* ---------- SECTION DATA ---------- */
+
+const sections = {
+
+characters:`
+
+<article class="entry">
+<h3>Found</h3>
+<p>
+Creator of the crystal systems and current vessel of the Amethyst Knight Suit.
+His transformation into the Sin of Wrath was the result of Glasswright containment protocols.
+</p>
+</article>
+
+<article class="entry">
+<h3>Medea</h3>
+<p>
+Former assistant to Found. Her life force was used to stabilize the AKS system after the Mournland blast.
+</p>
+</article>
+
+<article class="entry">
+<h3>ISM</h3>
+<p>
+Internal Systems Monitor. Originally created to assist Found in experimentation.
+Current psychological state: unstable.
+</p>
+</article>
+
+`,
+
+locations:`
+
+<article class="entry">
+<h3>The Mournland</h3>
+<p>
+Ground zero of the crystalline blast event that reshaped the region.
+Reality remains unstable and corrupted.
+</p>
+</article>
+
+<article class="entry">
+<h3>Sharn</h3>
+<p>
+Formerly the largest city in the region before the infection spread.
+Many Glasswright operations originated here.
+</p>
+</article>
+
+`,
+
+factions:`
+
+<article class="entry">
+<h3>House Glasswright</h3>
+<p>
+Industrial house responsible for crystalline experimentation and development of the AKS system.
+</p>
+</article>
+
+<article class="entry">
+<h3>Family of Glass</h3>
+<p>
+Followers of Nyxis who embrace crystalline corruption as evolution.
+</p>
+</article>
+
+`,
+
+events:`
+
+<article class="entry">
+<h3>The Mournland Event</h3>
+<p>
+A catastrophic crystal explosion triggered during containment failure in Found's facility.
+Created the Mournland and awakened several Archons.
+</p>
+</article>
+
+`,
+
+logs:`
+
+<article class="entry">
+<h3>Archived System Log</h3>
+<p>
+Transmission recovered from facility core during the Mournland incident.
+</p>
+</article>
+
+`
+
+};
+
+/* ---------- LOAD SECTIONS ---------- */
+
+function loadSection(section){
+
+document.getElementById("content").innerHTML = sections[section];
+
+}
+
+/* ---------- SEARCH ---------- */
+
+document.getElementById("search").addEventListener("keyup",function(){
+
+let filter = this.value.toLowerCase();
+let entries = document.querySelectorAll(".entry");
+
+entries.forEach(entry =>{
+
+let text = entry.innerText.toLowerCase();
+
+entry.style.display = text.includes(filter) ? "block" : "none";
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
