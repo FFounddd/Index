@@ -183,6 +183,72 @@ animation:glitch .25s infinite;
 
 }
 
+/* ---------- AUDIO LOG SYSTEM ---------- */
+
+.audioLog{
+border:1px solid #440000;
+background:#0c0000;
+padding:12px;
+margin-top:10px;
+}
+
+.audioTitle{
+color:#ff4444;
+font-size:14px;
+margin-bottom:4px;
+}
+
+.audioDesc{
+color:#aa5555;
+font-size:12px;
+margin-bottom:8px;
+}
+
+.audioControls{
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+.playButton{
+background:#140000;
+border:1px solid #660000;
+color:#ff5555;
+padding:4px 10px;
+cursor:pointer;
+font-family:Consolas,monospace;
+}
+
+.playButton:hover{
+background:#220000;
+}
+
+.visualizer{
+height:40px;
+background:black;
+border:1px solid #330000;
+margin-top:6px;
+display:flex;
+align-items:flex-end;
+gap:2px;
+overflow:hidden;
+}
+
+.bar{
+width:3px;
+background:#ff2222;
+}
+
+.transcript{
+margin-top:10px;
+font-size:12px;
+color:#ff7777;
+border-top:1px solid #330000;
+padding-top:6px;
+min-height:30px;
+white-space:pre-wrap;
+}
+
 </style>
 </head>
 
@@ -848,18 +914,23 @@ logs:`
 
 <h2>ARCHIVED LOGS</h2>
 
-<details class="file">
-<summary>Recovered Facility Transmission</summary>
+<div class="audioLog">
 
-<div class="fileContent file-text">
+<div class="audioTitle">FND-P01 – Personal Recording</div>
+<div class="audioDesc">Recovered fragment from Found's private archive.</div>
 
-Audio log recovered from the Glasswright facility during the incident.
+<div class="audioControls">
+<button class="playButton" onclick="playLog('log1')">PLAY</button>
+<audio id="log1" src="audio/found_log.mp3"></audio>
+</div>
+
+<div class="visualizer" id="viz1"></div>
+
+<div class="transcript" id="txt1"></div>
 
 </div>
 
-</details>
-
-`
+`,
 
 };
 
@@ -883,6 +954,123 @@ content.classList.add("fadeIn");
 
 }
 
+/* ---------- AUDIO SYSTEM ---------- */
+
+const transcripts = {
+
+log1:[
+{time:0,text:"Right."},
+{time:2.5,text:"If you're hearing this then something has already gone wrong."},
+{time:6,text:"Which means the calculations were either incomplete."},
+{time:9,text:"Or I ignored them."},
+{time:12,text:"Both options are unfortunately very believable."},
+{time:16,text:"Medea would say I'm overthinking again."}
+]
+
+};
+
+function playLog(id){
+
+let audio=document.getElementById(id)
+let transcriptBox=document.getElementById("txt"+id.replace("log",""))
+
+if(audio.paused){
+
+audio.play()
+
+syncTranscript(audio,transcriptBox,transcripts[id])
+
+createVisualizer(audio,"viz"+id.replace("log",""))
+
+}else{
+
+audio.pause()
+
+}
+
+}
+
+/* ---------- TRANSCRIPT SYNC ---------- */
+
+function syncTranscript(audio,box,lines){
+
+audio.ontimeupdate=function(){
+
+let current=audio.currentTime
+
+for(let i=0;i<lines.length;i++){
+
+if(current>=lines[i].time){
+
+box.innerText=lines[i].text
+
+}
+
+}
+
+}
+
+}
+
+/* ---------- VISUALIZER ---------- */
+
+function createVisualizer(audio,vizId){
+
+let viz=document.getElementById(vizId)
+
+if(viz.dataset.init) return
+
+viz.dataset.init=true
+
+let ctx=new AudioContext()
+let src=ctx.createMediaElementSource(audio)
+let analyser=ctx.createAnalyser()
+
+src.connect(analyser)
+analyser.connect(ctx.destination)
+
+analyser.fftSize=64
+
+let bufferLength=analyser.frequencyBinCount
+let dataArray=new Uint8Array(bufferLength)
+
+for(let i=0;i<bufferLength;i++){
+
+let bar=document.createElement("div")
+bar.className="bar"
+viz.appendChild(bar)
+
+}
+
+let bars=viz.children
+
+function animate(){
+
+requestAnimationFrame(animate)
+
+analyser.getByteFrequencyData(dataArray)
+
+for(let i=0;i<bufferLength;i++){
+
+bars[i].style.height=dataArray[i]+"px"
+
+}
+
+if(Math.random()<0.01){
+
+document.body.classList.add("corrupt")
+
+setTimeout(()=>{
+document.body.classList.remove("corrupt")
+},120)
+
+}
+
+}
+
+animate()
+
+}
 </script>
 
 </body>
