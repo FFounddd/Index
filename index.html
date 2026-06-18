@@ -170,16 +170,130 @@ color:#ff7777;
 /* ---------- ISM GLITCH ---------- */
 
 .glitch{
-animation:glitch .25s infinite;
+position:relative;
+display:inline-block;
+color:#ff5555;
+animation:
+ismFlicker 2.5s infinite,
+ismShift .12s infinite;
+text-shadow:
+0 0 5px #ff0000,
+0 0 10px #ff0000,
+0 0 20px #aa0000;
 }
 
-@keyframes glitch{
+/* Red Ghost Layer */
 
-0%{text-shadow:2px 0 red}
-25%{text-shadow:-2px 0 purple}
-50%{text-shadow:2px 0 crimson}
-75%{text-shadow:-2px 0 white}
-100%{text-shadow:0 0 transparent}
+.glitch::before{
+content:attr(data-text);
+position:absolute;
+left:-2px;
+top:0;
+width:100%;
+overflow:hidden;
+color:#ff0000;
+opacity:.7;
+pointer-events:none;
+animation:glitchSlice1 .3s infinite;
+}
+
+/* White Ghost Layer */
+
+.glitch::after{
+content:attr(data-text);
+position:absolute;
+left:2px;
+top:0;
+width:100%;
+overflow:hidden;
+color:#ffffff;
+opacity:.35;
+pointer-events:none;
+animation:glitchSlice2 .25s infinite;
+}
+
+/* CRT Flicker */
+
+@keyframes ismFlicker{
+
+0%,100%{
+opacity:1;
+}
+
+5%{
+opacity:.5;
+}
+
+6%{
+opacity:1;
+}
+
+45%{
+opacity:.8;
+}
+
+46%{
+opacity:.2;
+}
+
+47%{
+opacity:1;
+}
+
+70%{
+opacity:.7;
+}
+
+71%{
+opacity:1;
+}
+
+}
+
+/* Tiny Jitter */
+
+@keyframes ismShift{
+
+0%{transform:translate(0,0);}
+20%{transform:translate(-1px,1px);}
+40%{transform:translate(1px,-1px);}
+60%{transform:translate(-2px,0);}
+80%{transform:translate(2px,1px);}
+100%{transform:translate(0,0);}
+
+}
+
+/* Horizontal Corruption Slices */
+
+@keyframes glitchSlice1{
+
+0%{
+clip-path:inset(0 0 90% 0);
+}
+
+50%{
+clip-path:inset(40% 0 30% 0);
+}
+
+100%{
+clip-path:inset(70% 0 10% 0);
+}
+
+}
+
+@keyframes glitchSlice2{
+
+0%{
+clip-path:inset(80% 0 0 0);
+}
+
+50%{
+clip-path:inset(20% 0 50% 0);
+}
+
+100%{
+clip-path:inset(10% 0 80% 0);
+}
 
 }
 
@@ -301,7 +415,10 @@ Archive database operational.
 Select a category to begin.
 </p>
 
-<p class="glitch">
+<p class="glitch"
+data-text="[ISM EDIT DETECTED]
+ISM SUBNOTE - Try not to damage anything with those pesky hands of yours...>
+[ISM EDIT DETECTED]
 ISM SUBNOTE - Try not to damage anything with those pesky hands of yours...
 </p>
 
